@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: app-service
+  config:
+    import: "optional:configserver:http://localhost:8888"
+
+server:
+  shutdown: graceful
+  port: 0

@@ -1,0 +1,46 @@
+spring:
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: app-service-route
+              uri: lb://APP-SERVICE
+              predicates:
+                - Path=/app/**
+              filters:
+                - StripPrefix=1
+            - id: app-service-second-route
+              uri: lb://APP-SERVICE
+              predicates:
+                - Path=/second/**
+              filters:
+                - StripPrefix=1
+eureka:
+  instance:
+    instance-id: gateway-service:${server.port}
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+    registry-fetch-interval-seconds: 5
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,gateway
+  endpoint:
+    gateway:
+      access: unrestricted
+    health:
+      show-details: always
+    metrics:
+      access: unrestricted
+
+
+#logging:
+#  level:
+#    org.springframework.boot.autoconfigure: DEBUG
+#    org.springframework.cloud.gateway: DEBUG
